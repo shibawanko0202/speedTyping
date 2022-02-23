@@ -19,7 +19,6 @@
 
   //ミスタイプのキーリスト
   const missType = [];
-
   let mt;
 
   //時間関係
@@ -127,6 +126,7 @@
           let finishTime = Date.now() - startTime;
           time.textContent = `${(finishTime / 1000).toFixed(2)}seconds!`;
           more.textContent = "";
+          finishSound.currentTime = 0;
           finishSound.play();
           return;
         };
@@ -170,6 +170,8 @@
     q();
     startTime = Date.now();
     isTyping = true;
+    resetSound.currentTime = 0;
+    resetSound.play();
   });
 
 }

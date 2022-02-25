@@ -10,6 +10,7 @@
   const more = document.getElementById("more");
   const accuracy = document.getElementById("accuracy"); 
   const ar = document.getElementById("ar");
+  const container = document.getElementById("container");
 
   //サウンドエフェクト
   const typeSound = new Audio("sound/カタッ(Enterキーを押した音).mp3");
@@ -21,7 +22,7 @@
 
   //ミスタイプのキーリスト
   const missType = [];
-  let mt;
+  // let mt;
 
   //時間関係
   let startTime;
@@ -99,6 +100,41 @@
     typed.textContent = "";
     more.textContent = `another ${questions.length}`;
   };
+
+  //パーセンテージの表示
+  function rate(){
+    let accuracyRate = (scoreCount / (scoreCount + badCount) * 100).toFixed(2);
+    accuracy.textContent = accuracyRate;
+    ar.classList.remove("safe","caution","dead");
+    if(accuracyRate >= 95){
+      ar.classList.add("safe");
+    } else if(accuracyRate >= 80){
+      ar.classList.add("caution");
+    } else {
+      ar.classList.add("dead");
+    };
+  };
+
+  //終了
+  function finish(){
+    typed.textContent = "";
+    untype.textContent = "finished!";
+    isTyping = false;
+    more.textContent = "";
+    finishSound.currentTime = 0;
+    finishSound.play();
+  };
+
+  //ミスしたキーのバルーンを作成
+  function missBaloon(key){
+    let balloon = document.createElement("div");
+    balloon.className = "balloon";
+    balloon.id = `${key}`;
+    balloon.style.top = "calc(" + 1 * Math.random() * 100 + "%)";
+    balloon.style.left = "calc(" + 1 *Math.random() * 100 + "%)";
+    balloon.textContent = `${key}`;
+    container.appendChild(balloon);
+  };
   
   //キーボードを叩いたら
   window.addEventListener("keydown",(e)=>{
@@ -124,14 +160,9 @@
       if(untype.textContent.length === 0){
         //問題が無くなったら終了
         if(questions.length === 0){
-          typed.textContent = "";
-          untype.textContent = "finished!";
-          isTyping = false;
+          finish();
           let finishTime = Date.now() - startTime;
           time.textContent = `${(finishTime / 1000).toFixed(2)}seconds!`;
-          more.textContent = "";
-          finishSound.currentTime = 0;
-          finishSound.play();
           return;
         };
         q();
@@ -151,10 +182,15 @@
 
       //ミスタイプのキーをカウント
       if(miss.textContent.match(e.key)){ //すでにあるなら加点
-        mt = missType.find((v) => v.key === e.key).num;
+        let mt = missType.find((v) => v.key === e.key).num;
+
         miss.textContent = miss.textContent.replace(`${e.key}:${mt}`,`${e.key}:${mt + 1}`);
         missType.find((v) => v.key === e.key).num++;
+
+        document.getElementById(`${e.key}`).style.transform = `scale(${(missType.find((v) => v.key === e.key).num)})`;
+
       } else { //初めてのカウント
+        missBaloon(e.key);
         missType.push({
           key:e.key,
           num:1,
@@ -163,20 +199,6 @@
       };
     };
   });
-
-  //パーセンテージの表示
-  function rate(){
-    let accuracyRate = (scoreCount / (scoreCount + badCount) * 100).toFixed(2);
-    accuracy.textContent = accuracyRate;
-    ar.classList.remove("safe","caution","dead");
-    if(accuracyRate >= 95){
-      ar.classList.add("safe");
-    } else if(accuracyRate >= 80){
-      ar.classList.add("caution");
-    } else {
-      ar.classList.add("dead");
-    };
-  };
 
   //始めの問題をセット
   window.addEventListener("keydown",(e)=>{

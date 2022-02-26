@@ -22,7 +22,6 @@
 
   //ミスタイプのキーリスト
   const missType = [];
-  // let mt;
 
   //時間関係
   let startTime;
@@ -189,7 +188,7 @@
 
         document.getElementById(`${e.key}`).style.transform = `scale(${(missType.find((v) => v.key === e.key).num)})`;
 
-      } else { //初めてのカウント
+      } else { //初めてのミスキーカウント
         missBaloon(e.key);
         missType.push({
           key:e.key,

@@ -8,4 +8,4 @@ HTML/CSS/javascriptでよく使う用語を出題するタイピングゲーム�
 
 良ければプレイしてみて下さい！
 
-![sample](./speedtyping.jpg)
+![sample](./img/speedtyping.jpg)

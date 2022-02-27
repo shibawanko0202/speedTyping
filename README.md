@@ -1,4 +1,4 @@
-＃speedTyping
+# typing!(speed)
 
 [typing!](https://shibawanko0202.github.io/speedTyping/)←play!
 

@@ -91,13 +91,9 @@ ul li a:hover{
   display: flex;
   justify-content: center;
   padding: 80px 0 20px;
-  font-size: 24px;
+  font-size: 30px;
   letter-spacing: .05em;
   opacity: .8;
-}
-#time{
-  font-size: 24px;
-  font-family: 'Ibarra Real Nova', serif;
 }
 #more,
 #restart{
@@ -112,7 +108,7 @@ ul li a:hover{
   display: flex;
   justify-content: center;
   padding-top: 25px;
-  font-size: 24px;
+  font-size: 30px;
   letter-spacing: .05em;
   color: rgb(202, 87, 67);
   opacity: .8;
@@ -131,7 +127,7 @@ ul li a:hover{
   align-items: flex-end;
   font-family: 'Xanh Mono', monospace;
   color:rgb(72, 121, 99);
-  opacity: .8;
+  opacity: .9;
 }
 #accuracy{
   left: 50%;

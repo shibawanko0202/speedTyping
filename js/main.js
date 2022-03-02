@@ -6,7 +6,6 @@
   const score = document.getElementById("score");
   const bad = document.getElementById("bad");
   const miss = document.getElementById("miss");
-  const time = document.getElementById("time");
   const more = document.getElementById("more");
   const accuracy = document.getElementById("accuracy"); 
   const ar = document.getElementById("ar");
@@ -180,7 +179,7 @@
         if(questions.length === 0){
           finish();
           let finishTime = Date.now() - startTime;
-          time.textContent = `${(finishTime / 1000).toFixed(2)}seconds`;
+          more.textContent = `${(finishTime / 1000).toFixed(2)}seconds`;
           return;
         };
         q();

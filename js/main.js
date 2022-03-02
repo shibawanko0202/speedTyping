@@ -89,7 +89,6 @@
     "math",
     "random",
     "length",
-
   ];
 
   //正誤カウント
@@ -122,6 +121,7 @@
   function finish(){
     typed.textContent = "";
     untype.textContent = "finished!";
+    untype.classList.add("flash");
     isTyping = false;
     more.textContent = "";
     finishSound.currentTime = 0;
@@ -180,7 +180,7 @@
         if(questions.length === 0){
           finish();
           let finishTime = Date.now() - startTime;
-          time.textContent = `${(finishTime / 1000).toFixed(2)}seconds!`;
+          time.textContent = `${(finishTime / 1000).toFixed(2)}seconds`;
           return;
         };
         q();
@@ -230,6 +230,7 @@
       location.reload();
       return;
     };
+    untype.classList.remove("flash");
     q();
     startTime = Date.now();
     isTyping = true;

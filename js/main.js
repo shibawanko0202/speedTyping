@@ -30,6 +30,7 @@
   const overlay = document.getElementById("overlay");
   const close = document.getElementById("close");
   const restart = document.getElementById("restart");
+  const timer = document.getElementById("timer");
 
   //サウンドエフェクト
   const typeSound = new Audio("sound/カタッ(Enterキーを押した音).mp3");
@@ -106,6 +107,9 @@
     "length",
   ];
 
+  //出題数(文字数)
+  const questionLength = 300;
+
   //正誤カウント
   let scoreCount = 0;
   let badCount = 0;
@@ -116,6 +120,32 @@
     untype.textContent = questions.splice(Math.floor(Math.random() * questions.length),1)[0];
     typed.textContent = "";
     more.textContent = `another ${questions.length}`;
+    timerSet(untype.textContent.length);
+  };
+
+  //時間制限
+  function timerSet(time){
+    const timerChild = document.createElement("div");
+    timerChild.classList.add("timer");
+    timerChild.style.width = `${time * 20}px`;
+    timer.appendChild(timerChild);
+    timerChild.style.animation = `timerBifore .27s linear 0s alternate forwards,timerAfter ${time * 0.45 + 1}s linear .4s`;
+    setTimeout(()=>{
+      timerChild.addEventListener("animationend",()=>{
+        timer.removeChild(timer.firstChild);
+        if(untype.textContent.length === 0){
+          return;
+        }
+        //出題数に達していて、問題が無くなったら終了
+        if((scoreCount > questionLength) && (questions.length === 0)){
+          finish();
+          return;
+        };
+        q();
+        badSound.currentTime = 0;
+        badSound.play();
+      });
+    },500);
   };
 
   //パーセンテージの表示
@@ -131,7 +161,7 @@
       ar.classList.add("dead");
     };
   };
-
+  
   //終了
   function finish(){
     typed.textContent = "";
@@ -142,6 +172,8 @@
     finishSound.currentTime = 0;
     finishSound.play();
     restart.classList.add("show");
+    let finishTime = Date.now() - startTime;
+    more.textContent = `${(finishTime / 1000).toFixed(2)}seconds`;
   };
 
   //ミスしたキーのバルーンを作成
@@ -149,8 +181,8 @@
     let balloon = document.createElement("div");
     balloon.className = "balloon";
     balloon.id = `${key}`;
-    balloon.style.top = "calc(" + 1 * Math.random() * 100 + "%)";
-    balloon.style.left = "calc(" + 1 *Math.random() * 100 + "%)";
+    balloon.style.top = `${Math.random() * 100}%`;
+    balloon.style.left = `${Math.random() * 100}%`;
     balloon.textContent = `${key}`;
     main.appendChild(balloon);
   };
@@ -196,11 +228,10 @@
 
       //もしuntypeが無くなったら次の問題へ
       if(untype.textContent.length === 0){
-        //問題が無くなったら終了
-        if(questions.length === 0){
+        timer.removeChild(timer.firstChild);
+        //出題数に達したら終了
+        if(scoreCount > questionLength){
           finish();
-          let finishTime = Date.now() - startTime;
-          more.textContent = `${(finishTime / 1000).toFixed(2)}seconds`;
           return;
         };
         q();
@@ -251,7 +282,8 @@
     if(!(e.key === " " || e.key === "Enter")){
       return;
     };
-    if(questions.length === 0){
+    //終了していたらリロード
+    if(scoreCount > questionLength){
       location.reload();
       return;
     };

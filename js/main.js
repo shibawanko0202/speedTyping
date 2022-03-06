@@ -136,8 +136,13 @@
         if(untype.textContent.length === 0){
           return;
         }
-        //出題数に達していて、問題が無くなったら終了
-        if((scoreCount > questionLength) && (questions.length === 0)){
+        //出題数に達していて、現在の問題を打ち終わったら終了
+        if((scoreCount >= questionLength) && (untype.textContent.length === 0)){
+          finish();
+          return;
+        };
+        //問題が底をついたら終了
+        if(questions.length === 0){
           finish();
           return;
         };
@@ -294,6 +299,5 @@
     resetSound.currentTime = 0;
     resetSound.play();
   });
-
-
+  
 }

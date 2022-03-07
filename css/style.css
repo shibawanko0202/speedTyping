@@ -159,16 +159,18 @@ visibility:hidden;
   letter-spacing: .05em;
   opacity: .8;
 }
-#more,
-#restart{
+#more{
+  color: black;
   height: 35px;
-  font-size: 30px;
+  line-height: 35px;
+  font-size: 16px;
+  margin-top: 10px;
   font-family: 'Ibarra Real Nova', serif;
 }
 #misstype{
   display: flex;
   justify-content: center;
-  padding-top: 25px;
+  padding-top: 10px;
   font-size: 30px;
   letter-spacing: .05em;
   color: rgb(202, 87, 67);
@@ -230,6 +232,9 @@ visibility:hidden;
   font-size: 40px;
 }
 #restart{
+  height: 35px;
+  font-size: 30px;
+  font-family: 'Ibarra Real Nova', serif;
   visibility: hidden;
   color: black;
   margin: 0;

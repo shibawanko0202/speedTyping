@@ -47,66 +47,6 @@
   let startTime;
   let isTyping = false;
 
-  //問題集
-  const questions = [
-    "helloworld",
-    "apple",
-    "googlechrome",
-    "google",
-    "facebook",
-    "amazon",
-    "microsoft",
-    "javascript",
-    "cascadingstylesheets",
-    "hypertextmarkuplanguage",
-    "usestrict",
-    "document",
-    "listener",
-    "getelementbyid",
-    "textcontent",
-    "addeventlistener",
-    "current",
-    "function",
-    "font-family",
-    "font-size",
-    "justify-content",
-    "padding",
-    "margin",
-    "display",
-    "stylesheet",
-    "text-align",
-    "index.html",
-    "main.js",
-    "style.css",
-    "referenceerror",
-    "console",
-    "window",
-    "github",
-    "viewport",
-    "charset",
-    "header",
-    "body",
-    "footer",
-    "aside",
-    "typography",
-    "return",
-    "true",
-    "false",
-    "documentobjectmodel",
-    "classlist",
-    "foreach",
-    "new",
-    "constructor",
-    "this",
-    "transition",
-    "transform",
-    "div",
-    "title",
-    "math",
-    "random",
-    "length",
-  ];
-
   //出題数(文字数)
   const questionLength = 350;
 
@@ -117,9 +57,10 @@
 
   //問題のセット
   function q(){
-    untype.textContent = questions.splice(Math.floor(Math.random() * questions.length),1)[0];
+    const q = questions.splice(Math.floor(Math.random() * questions.length),1)[0]
+    untype.textContent = q.word;
     typed.textContent = "";
-    more.textContent = `another ${questions.length}`;
+    more.textContent = q.mean;
     timerSet(untype.textContent.length);
   };
 
@@ -129,7 +70,9 @@
     timerChild.classList.add("timer");
     timerChild.style.width = `${time * 20}px`;
     timer.appendChild(timerChild);
-    timerChild.style.animation = `timerBifore .27s linear 0s alternate forwards,timerAfter ${time * 0.45 + 1}s linear .4s`;
+    //ここで制限時間指定
+    timerChild.style.animation = `timerBifore .27s linear 0s alternate forwards,timerAfter ${time * 0.55 + 1}s linear .4s`;
+
     setTimeout(()=>{
       timerChild.addEventListener("animationend",()=>{
         timer.removeChild(timer.firstChild);
@@ -235,7 +178,7 @@
       if(untype.textContent.length === 0){
         timer.removeChild(timer.firstChild);
         //出題数に達したら終了
-        if(scoreCount > questionLength){
+        if((scoreCount > questionLength) || (questions.length === 0)){
           finish();
           return;
         };
@@ -300,5 +243,6 @@
     resetSound.currentTime = 0;
     resetSound.play();
   });
+
   
 }

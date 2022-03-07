@@ -108,7 +108,7 @@
   ];
 
   //出題数(文字数)
-  const questionLength = 300;
+  const questionLength = 350;
 
   //正誤カウント
   let scoreCount = 0;
@@ -284,11 +284,12 @@
     if(isTyping){
       return;
     };
+    //Enter/Space to restart
     if(!(e.key === " " || e.key === "Enter")){
       return;
     };
     //終了していたらリロード
-    if(scoreCount > questionLength){
+    if((scoreCount > questionLength) || (questions.length === 0)){
       location.reload();
       return;
     };

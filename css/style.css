@@ -199,11 +199,6 @@ visibility:hidden;
 #bad{
   padding-left: 10px;
 }
-#miss{
-  min-height: 30px;
-  font-size: 24px;
-  font-family: 'Ibarra Real Nova', serif;
-}
 #ar{
   display: flex;
   align-items: flex-end;
@@ -256,9 +251,10 @@ visibility:hidden;
 }
 .balloon{
   font-family: 'Ibarra Real Nova', serif;
-  width: 16px;
-  height: 16px;
-  font-size: 12px;
+  width: 20px;
+  height: 20px;
+  line-height: 18px;
+  font-size: 14px;
   border-radius: 50%;
   background-color: rgb(72, 121, 99);
   color: #fff;

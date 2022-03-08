@@ -21,7 +21,6 @@
   const untype = document.getElementById("untype");
   const score = document.getElementById("score");
   const bad = document.getElementById("bad");
-  const miss = document.getElementById("miss");
   const more = document.getElementById("more");
   const accuracy = document.getElementById("accuracy"); 
   const ar = document.getElementById("ar");
@@ -132,6 +131,16 @@
     balloon.style.top = `${Math.random() * 100}%`;
     balloon.style.left = `${Math.random() * 100}%`;
     balloon.textContent = `${key}`;
+    //カーソルをのせたら数値を表示
+    balloon.addEventListener("mouseenter",()=>{
+      balloon.style.fontSize = "10px";
+      let mt = missType.find((v) => v.key === balloon.textContent).num;
+      balloon.textContent += `:${mt}`
+    });
+    balloon.addEventListener("mouseleave",()=>{
+      balloon.style.fontSize = "14px";
+      balloon.textContent = `${key}`;
+    });
     main.appendChild(balloon);
   };
 
@@ -203,13 +212,12 @@
       badSound.play();
 
       //ミスタイプのキーをカウント
-      if(miss.textContent.match(e.key)){ //すでにあるなら加点
+      if(missType.find((v) => v.key === e.key)){ //すでにあるなら加点
         let mt = missType.find((v) => v.key === e.key).num;
 
-        miss.textContent = miss.textContent.replace(`${e.key}:${mt}`,`${e.key}:${mt + 1}`);
         missType.find((v) => v.key === e.key).num++;
 
-        document.getElementById(`${e.key}`).style.transform = `scale(${(missType.find((v) => v.key === e.key).num)})`;
+        document.getElementById(`${e.key}`).style.transform = `scale(${(missType.find((v) => v.key === e.key).num) * 0.9})`;
 
       } else { //初めてのミスキーカウント
         missBaloon(e.key);
@@ -217,7 +225,6 @@
           key:e.key,
           num:1,
         });
-        miss.textContent += `${missType[missType.length - 1].key}:${missType[missType.length - 1].num}  `;
       };
     };
   });

@@ -21,9 +21,9 @@
   const untype = document.getElementById("untype");
   const score = document.getElementById("score");
   const bad = document.getElementById("bad");
-  const more = document.getElementById("more");
+  const mean = document.getElementById("mean");
   const accuracy = document.getElementById("accuracy"); 
-  const ar = document.getElementById("ar");
+  const rate = document.getElementById("rate");
   const main = document.getElementById("main");
   const hambarger = document.getElementById("hambarger");
   const overlay = document.getElementById("overlay");
@@ -47,7 +47,7 @@
   let isTyping = false;
 
   //出題数(文字数)
-  const questionLength = 350;
+  const QuestionLength = 350;
 
   //正誤カウント
   let scoreCount = 0;
@@ -55,16 +55,16 @@
   let accuracyRate;
 
   //問題のセット
-  function q(){
-    const q = questions.splice(Math.floor(Math.random() * questions.length),1)[0]
+  function setQuestion(){
+    const q = questions.splice(Math.floor(Math.random() * questions.length),1)[0];
     untype.textContent = q.word;
     typed.textContent = "";
-    more.textContent = q.mean;
-    timerSet(untype.textContent.length);
+    mean.textContent = q.mean;
+    setTimer(untype.textContent.length);
   };
 
   //時間制限
-  function timerSet(time){
+  function setTimer(time){
     const timerChild = document.createElement("div");
     timerChild.classList.add("timer");
     timerChild.style.width = `${time * 20}px`;
@@ -79,7 +79,7 @@
           return;
         }
         //出題数に達していて、現在の問題を打ち終わったら終了
-        if((scoreCount >= questionLength) && (untype.textContent.length === 0)){
+        if((scoreCount >= QuestionLength) && (untype.textContent.length === 0)){
           finish();
           return;
         };
@@ -88,7 +88,7 @@
           finish();
           return;
         };
-        q();
+        setQuestion();
         badSound.currentTime = 0;
         badSound.play();
       });
@@ -96,16 +96,16 @@
   };
 
   //パーセンテージの表示
-  function rate(){
+  function renderRate(){
     let accuracyRate = (scoreCount / (scoreCount + badCount) * 100).toFixed(2);
     accuracy.textContent = accuracyRate;
-    ar.classList.remove("safe","caution","dead");
+    rate.classList.remove("safe","caution","dead");
     if(accuracyRate >= 95){
-      ar.classList.add("safe");
+      rate.classList.add("safe");
     } else if(accuracyRate >= 80){
-      ar.classList.add("caution");
+      rate.classList.add("caution");
     } else {
-      ar.classList.add("dead");
+      rate.classList.add("dead");
     };
   };
   
@@ -115,16 +115,16 @@
     untype.textContent = "finished!";
     untype.classList.add("flash");
     isTyping = false;
-    more.textContent = "";
+    mean.textContent = "";
     finishSound.currentTime = 0;
     finishSound.play();
     restart.classList.add("show");
     let finishTime = Date.now() - startTime;
-    more.textContent = `${(finishTime / 1000).toFixed(2)}seconds`;
+    mean.textContent = `${(finishTime / 1000).toFixed(2)}seconds`;
   };
 
   //ミスしたキーのバルーンを作成
-  function missBaloon(key){
+  function createBalloon(key){
     let balloon = document.createElement("div");
     balloon.className = "balloon";
     balloon.id = `${key}`;
@@ -134,8 +134,7 @@
     //カーソルをのせたら数値を表示
     balloon.addEventListener("mouseenter",()=>{
       balloon.style.fontSize = "10px";
-      let mt = missType.find((v) => v.key === balloon.textContent).num;
-      balloon.textContent += `:${mt}`
+      balloon.textContent += `:${missType.find((v) => v.key === balloon.textContent).num}`;
     });
     balloon.addEventListener("mouseleave",()=>{
       balloon.style.fontSize = "14px";
@@ -172,7 +171,7 @@
       //スコアを加点
       scoreCount++;
       score.textContent = scoreCount;
-      rate();
+      renderRate();
       //文字を跳ねさせる
       score.classList.add("pyon");
       score.addEventListener("animationend",()=>{
@@ -187,11 +186,11 @@
       if(untype.textContent.length === 0){
         timer.removeChild(timer.firstChild);
         //出題数に達したら終了
-        if((scoreCount > questionLength) || (questions.length === 0)){
+        if((scoreCount > QuestionLength) || (questions.length === 0)){
           finish();
           return;
         };
-        q();
+        setQuestion();
         resetSound.currentTime = 0;
         resetSound.play();
       };
@@ -200,7 +199,7 @@
       //ミスタイプに加点
       badCount++;
       bad.textContent = badCount;
-      rate();
+      renderRate();
       //文字を跳ねさせる
       bad.classList.add("pyon");
       bad.addEventListener("animationend",()=>{
@@ -213,14 +212,12 @@
 
       //ミスタイプのキーをカウント
       if(missType.find((v) => v.key === e.key)){ //すでにあるなら加点
-        let mt = missType.find((v) => v.key === e.key).num;
-
         missType.find((v) => v.key === e.key).num++;
-
+        //大きくする倍率指定
         document.getElementById(`${e.key}`).style.transform = `scale(${(missType.find((v) => v.key === e.key).num) * 0.9})`;
 
       } else { //初めてのミスキーカウント
-        missBaloon(e.key);
+        createBalloon(e.key);
         missType.push({
           key:e.key,
           num:1,
@@ -239,12 +236,12 @@
       return;
     };
     //終了していたらリロード
-    if((scoreCount > questionLength) || (questions.length === 0)){
+    if((scoreCount > QuestionLength) || (questions.length === 0)){
       location.reload();
       return;
     };
     untype.classList.remove("flash");
-    q();
+    setQuestion();
     startTime = Date.now();
     isTyping = true;
     resetSound.currentTime = 0;

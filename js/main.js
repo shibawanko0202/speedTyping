@@ -25,7 +25,7 @@
   const mean = document.getElementById("mean");
   const accuracy = document.getElementById("accuracy"); 
   const rate = document.getElementById("rate");
-  const main = document.getElementById("main");
+  const balloonRoom = document.getElementById("balloonroom");
   const hambarger = document.getElementById("hambarger");
   const overlay = document.getElementById("overlay");
   const close = document.getElementById("close");
@@ -68,7 +68,7 @@
   function setTimer(time){
     const timerChild = document.createElement("div");
     timerChild.classList.add("timer");
-    timerChild.style.width = `${time * 20}px`;
+    timerChild.style.width = `${time * 12 + 15}px`;
     timer.appendChild(timerChild);
     //ここで制限時間指定
     timerChild.style.animation = `timerBifore .27s linear 0s alternate forwards,timerAfter ${time * 0.55 + 1}s linear .4s`;
@@ -141,7 +141,17 @@
       balloon.style.fontSize = "14px";
       balloon.textContent = `${key}`;
     });
-    main.appendChild(balloon);
+    //クリックしたら破裂
+    balloon.addEventListener("click",()=>{
+      balloon.classList.add("explosion");
+      badSound.currentTime = 0;
+      badSound.play();
+      //アニメーションが終了したら要素を消す
+      balloon.addEventListener("animationend",()=>{
+        balloon.classList.add("disabled");
+      });
+    });
+    balloonRoom.appendChild(balloon);
   };
   
   //ハンバーガーメニュー
@@ -214,9 +224,11 @@
       //ミスタイプのキーをカウント
       if(missType.find((v) => v.key === e.key)){ //すでにあるなら加点
         missType.find((v) => v.key === e.key).num++;
+        const missKey = document.getElementById(`${e.key}`);
         //大きくする倍率指定
-        document.getElementById(`${e.key}`).style.transform = `scale(${(missType.find((v) => v.key === e.key).num) * 0.9})`;
-  
+        missKey.style.transform = `scale(${(missType.find((v) => v.key === e.key).num) * 0.9})`;
+        //破裂させたバルーンを復活
+        missKey.classList.remove("explosion","disabled");
       } else { //初めてのミスキーカウント
         createBalloon(e.key);
         missType.push({
@@ -250,6 +262,3 @@
   });
 
 })();
-
-
-  

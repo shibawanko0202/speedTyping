@@ -45,7 +45,7 @@ header h2{
 } 
 ul{
   display: flex;
-  margin: 20px 10px;
+  margin: 20px 8px 20px 0;
   padding: 0;
   align-items: center;
 }
@@ -77,7 +77,7 @@ ul li a:hover{
   opacity: 0.9;
   height: calc(100% - 70px - 50px);
   min-height: 400px;
-  width: 99%;
+  width: 97%;
   border-radius: 8px;
   margin: 0 auto;
   text-align: center;
@@ -91,7 +91,6 @@ ul li a:hover{
   align-items: center;
 }
 #container{
-  overflow: hidden;
   width: 100%;
   visibility:hidden;
 }
@@ -102,15 +101,19 @@ ul li a:hover{
   margin: 0 auto;
   height: 20px;
   width: 100%;
+  border-radius: 999px;
+  display: flex;
+  justify-content: center;
 }
 .timer{
   background-color: rgb(72, 121, 99);
   box-shadow:inset 4px 4px 6px black;
-  opacity: .8;
-  margin: 0 auto;
+  opacity: .9;
+  margin: auto;
   height: 20px;
   width: 100px;
   border-radius: 9999px;
+  animation-timing-function: linear;
 }
 @keyframes timerBifore{
   0%{
@@ -127,17 +130,13 @@ ul li a:hover{
   }
 }
 @keyframes timerAfter{
-  0%{
-    transform: scaleX(1);
-  }
-  80%{
-    transform: scale(0.2,.9);
-  }
-  90%{
-    transform: scale(0.1,.8);
+  97%{
+    width: 20px;
+    height: 20px;
   }
   100%{
-    transform: scale(0,0);
+    width: 0px;
+    height: 0px;
   }
 }
 #typed,
@@ -157,7 +156,7 @@ ul li a:hover{
 #goodtype{
   display: flex;
   justify-content: center;
-  padding: 0 0 20px;
+  padding: 10px 0 20px;
   font-size: 30px;
   letter-spacing: .05em;
   opacity: .8;
@@ -389,9 +388,12 @@ footer{
   .normal_menu{
    display: none;
   }
+  #balloonroom{
+    width: 99%;
+  }
   #hambarger{
     display: block;
-    margin: 18px 10px 0 0;
+    margin: 18px 16px 0 0;
     color: #fff;
     font-size: 30px;
     cursor: pointer;
@@ -404,4 +406,11 @@ footer{
     pointer-events: none;
   }
 }
+
+/* fullscreen */
+/* @media(min-width: 800px){
+  #balloonroom{
+    width: 96%;
+  }
+} */
 

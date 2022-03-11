@@ -34,8 +34,9 @@
   
   //サウンドエフェクト
   const typeSound = new Audio("sound/カタッ(Enterキーを押した音).mp3");
-  typeSound.volume = 0.5;
+  typeSound.volume = 0.4;
   const resetSound = new Audio("sound/受話器置く03.mp3");
+  resetSound.volume = 0.8;
   const badSound = new Audio("sound/パッ.mp3");
   badSound.volume = .9;
   const finishSound = new Audio("sound/クイズ正解3.mp3");
@@ -72,7 +73,7 @@
     timer.appendChild(timerChild);
     //ここで制限時間指定
     timerChild.style.animation = `timerBifore .27s linear 0s alternate forwards,timerAfter ${time * 0.55 + 1}s linear .4s`;
-  
+    //アニメーションの終了と同時に次の問題へ
     setTimeout(()=>{
       timerChild.addEventListener("animationend",()=>{
         timer.removeChild(timer.firstChild);
@@ -129,8 +130,8 @@
     let balloon = document.createElement("div");
     balloon.className = "balloon";
     balloon.id = `${key}`;
-    balloon.style.top = `${Math.random() * 100}%`;
-    balloon.style.left = `${Math.random() * 100}%`;
+    balloon.style.top = `${Math.random() * 98 + 1}%`;
+    balloon.style.left = `${Math.random() * 98 + 1}%`;
     balloon.textContent = `${key}`;
     //カーソルをのせたら数値を表示
     balloon.addEventListener("mouseenter",()=>{

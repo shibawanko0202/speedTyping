@@ -54,7 +54,7 @@
   //正誤カウント
   let scoreCount = 0;
   let badCount = 0;
-  let accuracyRate;
+  let accuracyRate = 0;
   let continuousCorrect = 0;
   let bonusPoint = 0;
   
@@ -81,7 +81,7 @@
         timer.removeChild(timer.firstChild);
         if(untype.textContent.length === 0){
           return;
-        }
+        };
         //出題数に達していて、現在の問題を打ち終わったら終了
         if((scoreCount >= QuestionLength) && (untype.textContent.length === 0)){
           finish();
@@ -104,28 +104,30 @@
     let bonus = document.createElement("div");
     bonus.className = "bonus";
     bonus.style.top = `${Math.random() * 40 + 40}%`;
+    //左右どっちに作るか
     let LorR = Math.floor(Math.random() * 2);
     if(LorR === 0){
-      bonus.style.left = `${Math.random() * 20 + 5}%`;
+      bonus.style.left = `${Math.random() * 20}%`;
     } else {
-      bonus.style.right = `${Math.random() * 20 + 2}%`;
-    }
+      bonus.style.right = `${Math.random() * 20}%`;
+    };
     bonus.textContent = `${point * 10}type`;
     bonus.style.width = `${point * 6 + 60}px`;
     bonus.style.height = `${point * 6 + 60}px`;
     bonus.style.lineHeight = `${point * 6 + 75}px`;
     bonus.style.fontSize = `${point * 1.5 + 16}px`;
     bonus.style.backgroundColor = `hsla(${Math.random() * 360}, 65%, 55%, .6)`;
+    //アニメーションが全て終わったら消す
     let animeCount = 0;
     bonus.addEventListener("animationend",()=>{
       if(animeCount == 1){
         bonus.classList.add("disabled");
         return;
-      }
+      };
       animeCount++;
       bubbleSound.currentTime = 0;
       bubbleSound.play();
-    })
+    });
     balloonRoom.appendChild(bonus);
     bubbleSound.currentTime = 0;
     bubbleSound.play()
@@ -150,7 +152,7 @@
     isTyping = false;
     let finishTime = Date.now() - startTime;
     typed.textContent = "";
-    const finishScore = ((scoreCount + continuousCorrect - (finishTime / 1000)) * (accuracyRate / 100)).toFixed(2);
+    const finishScore = ((scoreCount + bonusPoint - (finishTime / 1000)) * (accuracyRate / 100)).toFixed(2);
     untype.textContent = finishScore;
     finishSound.currentTime = 0;
     finishSound.play();
@@ -277,9 +279,9 @@
           key:e.key,
           num:1,
         });
-      };
-    };
-  });
+      };//ミスタイプのキーをカウント
+    };//ミスした場合
+  });//キーボードを叩いたら
   
   //始めの問題をセット
   window.addEventListener("keydown",(e)=>{

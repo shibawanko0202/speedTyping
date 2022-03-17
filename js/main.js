@@ -57,7 +57,11 @@
   let accuracyRate = 0;
   let continuousCorrect = 0;
   let bonusPoint = 0;
-  
+
+  //iosの判定
+  let ua = navigator.userAgent.toLowerCase();
+  let isIOS = ua.indexOf("iphone") !== -1;
+
   //問題のセット
   function setQuestion(){
     const q = questions.splice(Math.floor(Math.random() * questions.length),1)[0];
@@ -73,8 +77,10 @@
     timerChild.classList.add("timer");
     timerChild.style.width = `${time * 12 + 15}px`;
     timer.appendChild(timerChild);
+    
     //ここで制限時間指定
     timerChild.style.animation = `timerBifore .27s 0s forwards,timerAfter ${time * .55 + 1}s ease-in-out .4s`;
+
     //アニメーションの終了と同時に次の問題へ
     setTimeout(()=>{
       timerChild.addEventListener("animationend",()=>{
@@ -93,10 +99,18 @@
           return;
         };
         setQuestion();
-        bubbleSound.currentTime = 0;
-        bubbleSound.play();
+        playSound(bubbleSound);
       });
     },500);
+  };
+
+  //音を鳴らす(ios以外)
+  function playSound(sound){
+    if(isIOS){
+      return;
+    };
+    sound.currentTime = 0;
+    sound.play();
   };
 
   //ボーナスアニメーション
@@ -125,12 +139,10 @@
         return;
       };
       animeCount++;
-      bubbleSound.currentTime = 0;
-      bubbleSound.play();
+      playSound(bubbleSound);
     });
     balloonRoom.appendChild(bonus);
-    bubbleSound.currentTime = 0;
-    bubbleSound.play()
+    playSound(bubbleSound);
   };
   
   //パーセンテージの表示
@@ -154,8 +166,7 @@
     typed.textContent = "";
     const finishScore = ((scoreCount + bonusPoint - (finishTime / 1000)) * (accuracyRate / 100)).toFixed(2);
     untype.textContent = finishScore;
-    finishSound.currentTime = 0;
-    finishSound.play();
+    playSound(finishSound);
     timer.classList.add("hidden");
     untype.classList.add("score");
     restart.classList.add("show");
@@ -195,8 +206,7 @@
     //クリックしたら破裂
     balloon.addEventListener("click",()=>{
       balloon.classList.add("explosion");
-      bubbleSound.currentTime = 0;
-      bubbleSound.play();
+      playSound(bubbleSound);
       //アニメーションが終了したら要素を消す
       balloon.addEventListener("animationend",()=>{
         balloon.classList.add("disabled");
@@ -224,6 +234,7 @@
     if(overlay.className === "show"){
       return;
     };
+
     //untypeの1文字目と一致していたら
     if(e.key === untype.textContent.charAt(0)){
       //untypeから削ってtypedに足す
@@ -235,6 +246,7 @@
       continuousCorrect++;
       score.textContent = scoreCount;
       renderRate();
+
       //連続正解したらボーナス(10の倍数ごと)
       if((continuousCorrect % 10) == 0){
         getBonus(continuousCorrect / 10);
@@ -247,8 +259,7 @@
       });
   
       //タイプ音を鳴らす
-      typeSound.currentTime = 0;
-      typeSound.play();
+      playSound(typeSound);
   
       //もしuntypeが無くなったら次の問題へ
       if(untype.textContent.length === 0){
@@ -259,8 +270,7 @@
           return;
         };
         setQuestion();
-        resetSound.currentTime = 0;
-        resetSound.play();
+        playSound(resetSound);
       };
   
     } else { //ミスタイプした場合
@@ -274,10 +284,10 @@
       bad.addEventListener("animationend",()=>{
         bad.classList.remove("pyon");
       });
+      
       //ブザーを鳴らす
-      bubbleSound.currentTime = 0;
-      bubbleSound.play();
-  
+      playSound(bubbleSound);
+
       //ミスタイプのキーをカウント
       if(missType.find((v) => v.key === e.key)){ //すでにあるなら加点
         missType.find((v) => v.key === e.key).num++;
@@ -310,11 +320,11 @@
       location.reload();
       return;
     };
+    untype.classList.remove("flash");
     setQuestion();
     startTime = Date.now();
     isTyping = true;
-    resetSound.currentTime = 0;
-    resetSound.play();
+    playSound(resetSound);
   });
 
 })();
